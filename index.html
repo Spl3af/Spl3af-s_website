@@ -207,7 +207,7 @@ window.onload = () => {
     forceBootBtn.addEventListener("click", () => {
       document.body.classList.add("fadeOut");
       setTimeout(() => {
-        window.location.href = "main.html";
+        window.location.href = "home.html";
       }, 1000);
     });
     document.addEventListener("click", () => {
@@ -221,7 +221,7 @@ document.getElementById("commandLine").addEventListener("keydown", function(e) {
     if (cmd === "/boot") {
       document.body.classList.add("fadeOut");
       setTimeout(() => {
-        window.location.href = "main.html";
+        window.location.href = "home.html";
       }, 1000);
     } else {
       alert("Unknown command. Try /boot");
