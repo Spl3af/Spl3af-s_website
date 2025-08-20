@@ -178,7 +178,7 @@ function showBootMessage() {
     i++;
     setTimeout(showBootMessage, 500);
   } else {
- setTimeout(() => {
+setTimeout(() => {
   bootLog.innerHTML = "";
   terminal.style.display = "block";
   document.getElementById("commandLine").focus(); // Auto-focus input
@@ -189,7 +189,6 @@ function showBootMessage() {
 window.onload = () => {
   updateZoom();
   showBootMessage();
-  document.getElementById("commandLine").focus();
 };
 
     forceBootBtn.addEventListener("click", () => {
