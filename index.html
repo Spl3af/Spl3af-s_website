@@ -6,6 +6,22 @@
   <title>Spl3af Terminal</title>
   <link rel="stylesheet" href="styles.css">
   <style>
+    
+  #terminalWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100vh;
+  padding-top: 5vh;
+
+  /* Responsive scaling */
+  transform: scale(calc(0.8 + 0.4 * (100vw / 1000)));
+  transform-origin: top center;
+
+  /* Smooth transitions */
+  transition: transform 0.3s ease-in-out;
+}
+
     body {
       background-color: #000000;
       font-family: monospace;
@@ -50,15 +66,27 @@
       animation: blink 1s step-end infinite;
     }
 
-    @keyframes blink {
-      50% { opacity: 0; }
-    }
+    #commandLine {
+  outline: none;
+  color: #00ff00;
+  font-family: monospace;
+  white-space: pre;
+}
+
+#cursor {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
   </style>
 </head>
 <body>
 
   <div id="bootLog"></div>
-
+  
+<div id="terminalWrapper">
   <div id="terminal">
     <pre><code>
  ██████╗   ██████╗   ██╗       ██████╗    █████╗     ███████╗
@@ -75,12 +103,12 @@
  ╚═══<^:
     </code></pre>
 
-    <div id="terminalInput">
-      &gt; <input type="text" id="commandInput" placeholder="Type /Boot" />
-      <span id="cursor">_</span>
+<div id="terminalInput">
+  &gt; <span id="commandLine" contenteditable="true"></span><span id="cursor">_</span>
+</div>
     </div>
   </div>
-
+</div>
   <button id="forceBootBtn">Force Boot</button>
 
   <script>
@@ -138,19 +166,21 @@
       }, 1000);
     });
 
-    document.getElementById("commandInput").addEventListener("keydown", function(e) {
-      if (e.key === "Enter") {
-        const cmd = this.value.trim().toLowerCase();
-        if (cmd === "/boot") {
-          document.body.classList.add("fadeOut");
-          setTimeout(() => {
-            window.location.href = "main.html";
-          }, 1000);
-        } else {
-          alert("Unknown command. Try /boot");
-        }
-      }
-    });
+document.getElementById("commandLine").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") {
+    e.preventDefault(); // Prevent newline
+    const cmd = this.innerText.trim().toLowerCase();
+    if (cmd === "/boot") {
+      document.body.classList.add("fadeOut");
+      setTimeout(() => {
+        window.location.href = "main.html";
+      }, 1000);
+    } else {
+      alert("Unknown command. Try /boot");
+    }
+  }
+});
+    document.getElementById("commandLine").addEventListener("paste", e => e.preventDefault());
   </script>
 </body>
 </html>
