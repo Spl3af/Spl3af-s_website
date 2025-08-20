@@ -6,7 +6,17 @@
   <title>Spl3af Terminal</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    
+  
+  #commandLine {
+  outline: none;
+  border: none;
+  background: transparent;
+  color: #00ff00;
+  font-family: monospace;
+  white-space: pre;
+  caret-color: transparent; /* hides native caret */
+}
+
   #terminalWrapper {
   display: flex;
   justify-content: center;
@@ -112,6 +122,15 @@
   <button id="forceBootBtn">Force Boot</button>
 
   <script>
+    function updateZoom() {
+  const wrapper = document.getElementById("terminalWrapper");
+  const scale = Math.min(1.5, 0.8 + 0.4 * (window.innerWidth / 1000));
+  wrapper.style.transform = `scale(${scale})`;
+}
+
+window.addEventListener("resize", updateZoom);
+window.addEventListener("load", updateZoom);
+
     function isMobileDevice() {
       return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     }
