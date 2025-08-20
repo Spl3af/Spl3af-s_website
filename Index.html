@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spl3af Terminal</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      background-color: #000000;
+      font-family: monospace;
+      color: #00ff00;
+    }
+
+    #bootLog {
+      padding: 10px;
+    }
+
+    .ok-tag {
+      color: #00ff00;
+      font-weight: bold;
+    }
+
+    .error-tag {
+      color: #ff0000;
+      font-weight: bold;
+      text-shadow: 0 0 5px #ff0000;
+    }
+
+    #terminal {
+      display: none;
+    }
+
+    #forceBootBtn {
+      background-color: #000;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      font-family: monospace;
+      padding: 5px 10px;
+      margin-top: 10px;
+      cursor: pointer;
+      display: none;
+    }
+
+    #terminalInput {
+      margin-top: 10px;
+    }
+
+    #cursor {
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="bootLog"></div>
+
+  <div id="terminal">
+    <pre><code>
+ ██████╗   ██████╗   ██╗       ██████╗    █████╗     ███████╗
+ ██╔════╝  ██╔══██╗  ██║       ╚════██   ██╔══██╗    ██╔════╝
+ ╚█████╗   ██████╔╝  ██║        █████╗   ███████║    █████╗  
+  ╚═══██╗  ██╔═══╝   ██║        ╚═══██╗  ██╔══██║    ██╔══╝  
+ ██████╔╝  ██║       ███████╗  ██████╔╝  ██║  ██║    ██║     
+ ╚═════╝   ╚═╝       ╚══════╝  ╚═════╝   ╚═╝  ╚═╝    ╚═╝    
+ ║    ╔══════════════════════════════════════════╗
+ ║    ║   Welcome to Spl3af Terminal Interface  ║
+ ║    ╚══════════════════════════════════════════╝
+ ║
+ ║       Type  <strong>/Boot</strong>  To Boot into The Website
+ ╚═══<^:
+    </code></pre>
+
+    <div id="terminalInput">
+      &gt; <input type="text" id="commandInput" placeholder="Type /Boot" />
+      <span id="cursor">_</span>
+    </div>
+  </div>
+
+  <button id="forceBootBtn">Force Boot</button>
+
+  <script>
+    function isMobileDevice() {
+      return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+
+    const bootLog = document.getElementById("bootLog");
+    const terminal = document.getElementById("terminal");
+    const forceBootBtn = document.getElementById("forceBootBtn");
+
+    const isMobile = isMobileDevice();
+    let errorDetected = false;
+
+    const bootMessages = [
+      '<span class="ok-tag">[OK]</span> Initializing Core...',
+      '<span class="ok-tag">[OK]</span> Loading safety protocols...',
+      '<span class="ok-tag">[OK]</span> Mounting /spl3af/home',
+      isMobile
+        ? '<span class="error-tag">[ERROR]</span> Device compatibility failed.'
+        : '<span class="ok-tag">[OK]</span> Checking device compatibility...',
+      isMobile
+        ? '<span class="error-tag">[ERROR]</span> Terminal access restricted.'
+        : '<span class="ok-tag">[OK]</span> Ready.',
+      isMobile
+        ? '<span class="error-tag">[FAIL]</span> Boot sequence aborted.'
+        : 'Waiting for: <strong>/Boot</strong> to proceed.'
+    ];
+
+    if (isMobile) errorDetected = true;
+
+    let i = 0;
+    function showBootMessage() {
+      if (i < bootMessages.length) {
+        const line = document.createElement("pre");
+        line.innerHTML = bootMessages[i];
+        bootLog.appendChild(line);
+        i++;
+        setTimeout(showBootMessage, 500);
+      } else {
+        if (errorDetected) {
+          forceBootBtn.style.display = "inline-block";
+        } else {
+          terminal.style.display = "block";
+        }
+      }
+    }
+
+    window.onload = showBootMessage;
+
+    forceBootBtn.addEventListener("click", () => {
+      document.body.classList.add("fadeOut");
+      setTimeout(() => {
+        window.location.href = "main.html";
+      }, 1000);
+    });
+
+    document.getElementById("commandInput").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        const cmd = this.value.trim().toLowerCase();
+        if (cmd === "/boot") {
+          document.body.classList.add("fadeOut");
+          setTimeout(() => {
+            window.location.href = "main.html";
+          }, 1000);
+        } else {
+          alert("Unknown command. Try /boot");
+        }
+      }
+    });
+  </script>
+</body>
+</html>
