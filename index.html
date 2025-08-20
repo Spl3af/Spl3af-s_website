@@ -178,10 +178,11 @@ function showBootMessage() {
     i++;
     setTimeout(showBootMessage, 500);
   } else {
-    setTimeout(() => {
-      bootLog.innerHTML = ""; // Clear logs
-      terminal.style.display = "block"; // Reveal terminal
-    }, 1000); // Delay for dramatic effect
+ setTimeout(() => {
+  bootLog.innerHTML = "";
+  terminal.style.display = "block";
+  document.getElementById("commandLine").focus(); // Auto-focus input
+}, 1000);
   }
 }
 
