@@ -6,6 +6,16 @@
   <title>Spl3af Terminal</title>
   <link rel="stylesheet" href="styles.css">
   <style>
+    #commandLine {
+  outline: none;
+  border: none;
+  background: transparent;
+  color: #00ff00;
+  font-family: monospace;
+  white-space: pre;
+  display: inline-block;
+  min-width: 1ch;
+}
   
   #commandLine {
   outline: none;
@@ -184,6 +194,13 @@ window.addEventListener("load", updateZoom);
         window.location.href = "main.html";
       }, 1000);
     });
+    window.onload = () => {
+  showBootMessage();
+  document.getElementById("commandLine").focus();
+};
+    document.addEventListener("click", () => {
+  document.getElementById("commandLine").focus();
+});
 
 document.getElementById("commandLine").addEventListener("keydown", function(e) {
   if (e.key === "Enter") {
