@@ -6,7 +6,6 @@
   <title>Spl3af Terminal</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    /* Prevent scrollbars from appearing */
 html, body {
   margin: 0;
   padding: 0;
@@ -42,6 +41,8 @@ html, body {
   align-items: flex-start;
   height: 100vh;
   padding-top: 5vh;
+  overflow: hidden;
+  position: relative;
 
   /* Responsive scaling */
   transform: scale(calc(0.8 + 0.4 * (100vw / 1000)));
@@ -116,6 +117,7 @@ html, body {
   <div id="bootLog"></div>
   
 <div id="terminalWrapper">
+    <div id="terminalInner">
   <div id="terminal">
     <pre><code>
  ██████╗   ██████╗   ██╗       ██████╗    █████╗     ███████╗
@@ -134,10 +136,12 @@ html, body {
 
 <div id="terminalInput">
   &gt; <span id="commandLine" contenteditable="true"></span><span id="cursor">_</span>
-</div>
+</div> <!--WHY SO MANY DIV!!!!-->
     </div>
   </div>
 </div>
+</div>
+  
   <button id="forceBootBtn">Force Boot</button>
 
   <script>
