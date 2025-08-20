@@ -170,21 +170,20 @@ window.addEventListener("load", updateZoom);
     if (isMobile) errorDetected = true;
 
     let i = 0;
-    function showBootMessage() {
-      if (i < bootMessages.length) {
-        const line = document.createElement("pre");
-        line.innerHTML = bootMessages[i];
-        bootLog.appendChild(line);
-        i++;
-        setTimeout(showBootMessage, 500);
-      } else {
-        if (errorDetected) {
-          forceBootBtn.style.display = "inline-block";
-        } else {
-          terminal.style.display = "block";
-        }
-      }
-    }
+function showBootMessage() {
+  if (i < bootMessages.length) {
+    const line = document.createElement("pre");
+    line.innerHTML = bootMessages[i];
+    bootLog.appendChild(line);
+    i++;
+    setTimeout(showBootMessage, 500);
+  } else {
+    setTimeout(() => {
+      bootLog.innerHTML = ""; // Clear logs
+      terminal.style.display = "block"; // Reveal terminal
+    }, 1000); // Delay for dramatic effect
+  }
+}
 
     window.onload = showBootMessage;
 
