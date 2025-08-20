@@ -185,7 +185,11 @@ function showBootMessage() {
   }
 }
 
-    window.onload = showBootMessage;
+window.onload = () => {
+  updateZoom();
+  showBootMessage();
+  document.getElementById("commandLine").focus();
+};
 
     forceBootBtn.addEventListener("click", () => {
       document.body.classList.add("fadeOut");
@@ -193,10 +197,6 @@ function showBootMessage() {
         window.location.href = "main.html";
       }, 1000);
     });
-    window.onload = () => {
-  showBootMessage();
-  document.getElementById("commandLine").focus();
-};
     document.addEventListener("click", () => {
   document.getElementById("commandLine").focus();
 });
