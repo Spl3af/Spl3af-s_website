@@ -189,6 +189,15 @@ function showBootMessage() {
     bootLog.appendChild(line);
     i++;
     setTimeout(showBootMessage, 500);
+        forceBootBtn.addEventListener("click", () => {
+      document.body.classList.add("fadeOut");
+      setTimeout(() => {
+        window.location.href = "home.html";
+      }, 1000);
+    });
+    document.addEventListener("click", () => {
+  document.getElementById("commandLine").focus();
+});
   } else {
 setTimeout(() => {
   bootLog.innerHTML = "";
@@ -203,15 +212,6 @@ window.onload = () => {
   showBootMessage();
 };
 
-    forceBootBtn.addEventListener("click", () => {
-      document.body.classList.add("fadeOut");
-      setTimeout(() => {
-        window.location.href = "home.html";
-      }, 1000);
-    });
-    document.addEventListener("click", () => {
-  document.getElementById("commandLine").focus();
-});
 
 document.getElementById("commandLine").addEventListener("keydown", function(e) {
   if (e.key === "Enter") {
