@@ -85,6 +85,12 @@ html, body {
       margin-top: 10px;
       cursor: pointer;
       display: none;
+
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
     }
 
     #terminalInput {
@@ -189,7 +195,9 @@ window.onload = () => {
     }
 
     showMobileBoot();
-
+    setTimeout(() => {
+  forceBootBtn.style.display = "block";
+    }, mobileBootMessages.length * 500 + 500);
     forceBootBtn.addEventListener("click", () => {
       document.body.classList.add("fadeOut");
       setTimeout(() => {
