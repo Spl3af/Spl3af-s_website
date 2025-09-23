@@ -9,9 +9,10 @@
 html, body {
   margin: 0;
   padding: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
     #commandLine {
@@ -180,7 +181,9 @@ window.addEventListener("load", updateZoom);
     ];
 
     if (isMobile) errorDetected = true;
-
+    if (isMobile) {
+  forceBootBtn.style.display = "block";
+}
     let i = 0;
 function showBootMessage() {
   if (i < bootMessages.length) {
