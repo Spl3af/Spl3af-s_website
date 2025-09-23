@@ -42,6 +42,24 @@ font-family: monospace;
 <header id="topBanner">
   <h1 class="Banner">SPL3AF SYSTEM INTERFACE</h1>
 </header>
+<main>
+  <div style="height: 2000px; padding-top: 120px;">
+    <p class="glow">Welcome to the Spl3af Code Bank. Scroll down to explore payloads and modules.</p>
+  </div>
+</main>
 
 </body>
+  <script>
+  let lastScrollY = window.scrollY;
+
+  window.addEventListener("scroll", () => {
+    const banner = document.getElementById("topBanner");
+    if (window.scrollY > lastScrollY && window.scrollY > 50) {
+      banner.style.top = "-100px"; // Hide
+    } else {
+      banner.style.top = "0"; // Show
+    }
+    lastScrollY = window.scrollY;
+  });
+</script>
 </html>
