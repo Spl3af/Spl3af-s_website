@@ -4,15 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Spl3af Terminal</title>
-  <link rel="stylesheet" href="styles.css">
   <style>
 html, body {
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
 
     #commandLine {
@@ -144,93 +142,112 @@ html, body {
   
   <button id="forceBootBtn">Force Boot</button>
 
-  <script>
-    function updateZoom() {
-  const wrapper = document.getElementById("terminalWrapper");
-  const scale = Math.min(1.5, 0.8 + 0.4 * (window.innerWidth / 1000));
-  wrapper.style.transform = `scale(${scale})`;
+<script>
+function isMobileDevice() {
+  return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
-window.addEventListener("resize", updateZoom);
-window.addEventListener("load", updateZoom);
+window.onload = () => {
+  const bootLog = document.getElementById("bootLog");
+  const terminal = document.getElementById("terminal");
+  const forceBootBtn = document.getElementById("forceBootBtn");
+  const commandLine = document.getElementById("commandLine");
+  const isMobile = isMobileDevice();
+  let errorDetected = false;
 
-    function isMobileDevice() {
-      return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    }
+  function updateZoom() {
+    const wrapper = document.getElementById("terminalWrapper");
+    const scale = Math.min(1.5, 0.8 + 0.4 * (window.innerWidth / 1000));
+    wrapper.style.transform = `scale(${scale})`;
+  }
 
-    const bootLog = document.getElementById("bootLog");
-    const terminal = document.getElementById("terminal");
-    const forceBootBtn = document.getElementById("forceBootBtn");
+  window.addEventListener("resize", updateZoom);
+  updateZoom();
 
-    const isMobile = isMobileDevice();
-    let errorDetected = false;
+  if (isMobile) {
+    errorDetected = true;
+    forceBootBtn.style.display = "block";
+    document.getElementById("terminalWrapper").style.display = "none";
 
-    const bootMessages = [
-      '<span class="ok-tag">[OK]</span> Initializing Core...',
+    const mobileBootMessages = [
+      '<span class="ok-tag">[OK]</span> Initializing Mobile Core...',
       '<span class="ok-tag">[OK]</span> Loading safety protocols...',
-      '<span class="ok-tag">[OK]</span> Mounting /spl3af/home',
-      isMobile
-        ? '<span class="error-tag">[ERROR]</span> Device compatibility failed.'
-        : '<span class="ok-tag">[OK]</span> Checking device compatibility...',
-      isMobile
-        ? '<span class="error-tag">[ERROR]</span> Terminal access restricted.'
-        : '<span class="ok-tag">[OK]</span> Ready.',
-      isMobile
-        ? '<span class="error-tag">[FAIL]</span> Boot sequence aborted.'
-        : 'Waiting for: <strong>/Boot</strong> to proceed.'
+      '<span class="error-tag">[ERROR]</span> Terminal interface restricted.',
+      '<span class="ok-tag">[OK]</span> Mobile fallback enabled.',
+      'Tap <strong>Force Boot</strong> to proceed.'
     ];
 
-    if (isMobile) errorDetected = true;
-    if (isMobile) {
-  forceBootBtn.style.display = "block";
-}
     let i = 0;
-function showBootMessage() {
-  if (i < bootMessages.length) {
-    const line = document.createElement("pre");
-    line.innerHTML = bootMessages[i];
-    bootLog.appendChild(line);
-    i++;
-    setTimeout(showBootMessage, 500);
-        forceBootBtn.addEventListener("click", () => {
+    function showMobileBoot() {
+      if (i < mobileBootMessages.length) {
+        const line = document.createElement("pre");
+        line.innerHTML = mobileBootMessages[i];
+        bootLog.appendChild(line);
+        i++;
+        setTimeout(showMobileBoot, 500);
+      }
+    }
+
+    showMobileBoot();
+
+    forceBootBtn.addEventListener("click", () => {
       document.body.classList.add("fadeOut");
       setTimeout(() => {
         window.location.href = "home.html";
       }, 1000);
     });
-    document.addEventListener("click", () => {
-  document.getElementById("commandLine").focus();
-});
+
   } else {
-setTimeout(() => {
-  bootLog.innerHTML = "";
-  terminal.style.display = "block";
-  document.getElementById("commandLine").focus(); // Auto-focus input
-}, 1000);
-  }
-}
+    const bootMessages = [
+      '<span class="ok-tag">[OK]</span> Initializing Core...',
+      '<span class="ok-tag">[OK]</span> Loading safety protocols...',
+      '<span class="ok-tag">[OK]</span> Mounting /spl3af/home',
+      '<span class="ok-tag">[OK]</span> Checking device compatibility...',
+      '<span class="ok-tag">[OK]</span> Ready.',
+      'Waiting for: <strong>/Boot</strong> to proceed.'
+    ];
 
-window.onload = () => {
-  updateZoom();
-  showBootMessage();
-};
-
-
-document.getElementById("commandLine").addEventListener("keydown", function(e) {
-  if (e.key === "Enter") {
-    e.preventDefault(); // Prevent newline
-    const cmd = this.innerText.trim().toLowerCase();
-    if (cmd === "/boot") {
-      document.body.classList.add("fadeOut");
-      setTimeout(() => {
-        window.location.href = "home.html";
-      }, 1000);
-    } else {
-      alert("Unknown command. Try /boot");
+    let i = 0;
+    function showBootMessage() {
+      if (i < bootMessages.length) {
+        const line = document.createElement("pre");
+        line.innerHTML = bootMessages[i];
+        bootLog.appendChild(line);
+        i++;
+        setTimeout(showBootMessage, 500);
+      } else {
+        setTimeout(() => {
+          bootLog.innerHTML = "";
+          terminal.style.display = "block";
+          commandLine.focus();
+        }, 1000);
+      }
     }
+
+    showBootMessage();
+
+    document.addEventListener("click", () => {
+      commandLine.focus();
+    });
+
+    commandLine.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const cmd = this.innerText.trim().toLowerCase();
+        if (cmd === "/boot") {
+          document.body.classList.add("fadeOut");
+          setTimeout(() => {
+            window.location.href = "home.html";
+          }, 1000);
+        } else {
+          alert("Unknown command. Try /boot");
+        }
+      }
+    });
+
+    commandLine.addEventListener("paste", e => e.preventDefault());
   }
-});
-    document.getElementById("commandLine").addEventListener("paste", e => e.preventDefault());
-  </script>
+};
+</script>
 </body>
 </html>
